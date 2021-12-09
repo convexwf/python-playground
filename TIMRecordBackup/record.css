@@ -1,0 +1,17 @@
+PA {
+    font-size: 0.7em;
+    color: rgb(0,0,255);
+    white-space:pre-wrap;
+    line-height: 0;
+}
+PB {
+    font-size: 0.7em;
+    color: rgb(0,128,64);
+    white-space:pre-wrap;
+    line-height: 0;
+}
+rc {
+    font-size: 0.85em;
+    padding: 0px 12px;
+    line-height: 0;
+}
