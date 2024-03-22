@@ -12,6 +12,7 @@ import os
 from enum import Enum
 from typing import List, Tuple
 
+from geo_utils import GCJ02_to_WGS84, WGS84_to_GCJ02
 from mongoengine import (
     Document,
     EnumField,
@@ -80,32 +81,52 @@ def import_geo_data():
     print("Geo data imported successfully.")
 
 
-def check_lat_lng(lat: float, lng: float) -> bool:
+def check_lat_lng(
+    lat: float, lng: float, coords: str = "wgs84"
+) -> Tuple[bool, List[float]]:
     """Check if the latitude and longitude are valid.
+
+    If the coordinates are in WGS-84,
+    the latitude should be in [-90, 90] and
+    the longitude should be in [-180, 180].
+
+    If the coordinates are in GCJ-02, transform them to WGS-84 first
+    and then check the latitude and longitude.
 
     Args:
         lat (float): Latitude of the location.
         lng (float): Longitude of the location.
+        coords (str): Coordinates system, WGS-84 or GCJ-02.
 
     Returns:
-        bool: True if the latitude and longitude are valid, otherwise False.
+        Tuple[bool, List[float]]:
+            True if the latitude and longitude are valid, False otherwise.
+            The transformed latitude and longitude if the coordinates are in GCJ-02.
     """
-    if -90 <= lat <= 90 and -180 <= lng <= 180:
-        return True
-    return False
+    if coords == "wgs84":
+        return -90 <= lat <= 90 and -180 <= lng <= 180, [lat, lng]
+    elif coords == "gcj02":
+        wgs84_lat, wgs84_lng = GCJ02_to_WGS84(lat, lng)
+        return -90 <= wgs84_lat <= 90 and -180 <= wgs84_lng <= 180, [
+            wgs84_lat,
+            wgs84_lng,
+        ]
+    return False, []
 
 
-def get_city_info_by_lat_lng(lat: float, lng: float) -> dict:
+def get_city_info_by_lat_lng(lat: float, lng: float, coords: str = "wgs84") -> dict:
     """Get city information by latitude and longitude.
 
     Args:
         lat (float): Latitude of the location.
         lng (float): Longitude of the location.
+        coords (str): Coordinates system, WGS-84 or GCJ-02.
 
     Returns:
         dict: City information.
     """
-    if not check_lat_lng(lat, lng):
+    ok, [lat, lng] = check_lat_lng(lat, lng, coords)
+    if not ok:
         return {}
     city_info = CityInfo.objects(
         city_boundary__geo_intersects=[lng, lat], city_type=CityType.COUNTY
@@ -114,19 +135,20 @@ def get_city_info_by_lat_lng(lat: float, lng: float) -> dict:
 
 
 def batch_get_city_info_by_lat_lng(
-    lat_lng_list: List[Tuple[float, float]]
+    lat_lng_list: List[Tuple[float, float]], coords: str = "wgs84"
 ) -> List[dict]:
     """Get city information by latitude and longitude.
 
     Args:
         lat_lng_list (List[Tuple[float, float]]): List of latitude and longitude of the locations.
+        coords (str): Coordinates system, WGS-84 or GCJ-02.
 
     Returns:
         List[dict]: List of city information.
     """
     city_info_list = []
     for lat, lng in lat_lng_list:
-        city_info_list.append(get_city_info_by_lat_lng(lat, lng))
+        city_info_list.append(get_city_info_by_lat_lng(lat, lng, coords))
     return city_info_list
 
 
@@ -139,6 +161,7 @@ def main():
     )
     parser.add_argument("--lat", type=float, help="Latitude of the location.")
     parser.add_argument("--lon", type=float, help="Longitude of the location.")
+    parser.add_argument("--coords", choices=["wgs84", "gcj02"], default="wgs84")
     parser.add_argument("-f", "--file", type=str, help="Input file path.")
     parser.add_argument("-o", "--output", type=str, help="Output csv file path.")
     parser.add_argument(
@@ -149,7 +172,7 @@ def main():
     if args.import_geo_data:
         import_geo_data()
     elif args.lat and args.lon:
-        city_info = get_city_info_by_lat_lng(args.lat, args.lon)
+        city_info = get_city_info_by_lat_lng(args.lat, args.lon, args.coords)
         if len(city_info) == 0:
             print("No city information found. Maybe you should update the geo data.")
         else:
@@ -161,7 +184,7 @@ def main():
             lat_lng_list = [
                 tuple(map(float, line.strip().split(","))) for line in f.readlines()
             ]
-        city_info_list = batch_get_city_info_by_lat_lng(lat_lng_list)
+        city_info_list = batch_get_city_info_by_lat_lng(lat_lng_list, args.coords)
         with open(args.output, "w+", encoding="utf-8") as f:
             f.write("latlon(WGS84),ID,Name\n")
             for latlon, city_info in zip(lat_lng_list, city_info_list):
@@ -172,7 +195,7 @@ def main():
         while True:
             lat = float(input("Please input the latitude of the location: "))
             lng = float(input("Please input the longitude of the location: "))
-            city_info = get_city_info_by_lat_lng(lat, lng)
+            city_info = get_city_info_by_lat_lng(lat, lng, args.coords)
             if len(city_info) == 0:
                 print(
                     "No city information found. Maybe you should update the geo data."
