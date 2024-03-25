@@ -131,7 +131,11 @@ def get_city_info_by_lat_lng(lat: float, lng: float, coords: str = "wgs84") -> d
     city_info = CityInfo.objects(
         city_boundary__geo_intersects=[lng, lat], city_type=CityType.COUNTY
     ).first()
-    return city_info.to_mongo().to_dict() if city_info else {}
+    if not city_info:
+        return {}
+    city_dict = city_info.to_mongo().to_dict()
+    city_dict.update({"lat": lat, "lon": lng})
+    return city_dict
 
 
 def batch_get_city_info_by_lat_lng(
@@ -187,9 +191,9 @@ def main():
         city_info_list = batch_get_city_info_by_lat_lng(lat_lng_list, args.coords)
         with open(args.output, "w+", encoding="utf-8") as f:
             f.write("latlon(WGS84),ID,Name\n")
-            for latlon, city_info in zip(lat_lng_list, city_info_list):
+            for city_info in city_info_list:
                 f.write(
-                    f"{latlon[0]},{latlon[1]},{city_info.get('primary_name')}{city_info.get('secondary_name')}{city_info.get('city_name')}\n"
+                    f"[{city_info.get('lat')},{city_info.get('lon')}],{city_info.get('_id')},{city_info.get('primary_name')}{city_info.get('secondary_name')}{city_info.get('city_name')}\n"
                 )
     elif args.interactive:
         while True:

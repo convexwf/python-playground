@@ -11,6 +11,8 @@ import json
 import os
 from enum import Enum
 
+from geo_utils import GCJ02_to_WGS84, WGS84_to_GCJ02
+
 csv.field_size_limit(2048576)
 
 OUTPUT_JSON_DIR = os.environ.get("OUTPUT_JSON_DIR", "/tmp/city_info")
@@ -54,18 +56,28 @@ def read_ok_geo_csv():
 
 
 def extract_geo(geo: str, ext_path: str):
+    """extract wgs84 geo from gcj02 geo from ok_geo.csv
 
+    Args:
+        geo (str): center geo in gcj02 format, e.g 116.405285 39.904989
+        ext_path (str): _description_
+
+    Returns:
+        extracted wgs84 geo, e.g [116.405285, 39.904989]
+    """
     if geo == "EMPTY":
         print(f"Error: geo is empty, {ext_path}")
         return [0, 0]
-    return [float(geo.split(" ")[0]), float(geo.split(" ")[1])]
+    gcj02_lon, gcj02_lat = geo.split(" ")
+    wgs84_lat, wgs84_lon = GCJ02_to_WGS84(float(gcj02_lat), float(gcj02_lon))
+    return [wgs84_lon, wgs84_lat]
 
 
 def extract_mongo_polygon(polygons: str) -> dict:
     """extract mongodb supported polygon format from text.
 
     Args:
-        polygons (_type_): _description_
+        polygons (str): polygon text.
 
     Returns:
         A multi-polygon dict object as mongodb supported format.
@@ -78,7 +90,9 @@ def extract_mongo_polygon(polygons: str) -> dict:
         boundary = []
         for point in points:
             point = point.strip().split(" ")
-            boundary.append([float(point[0]), float(point[1])])
+            gcj02_lon, gcj02_lat = float(point[0]), float(point[1])
+            wgs84_lat, wgs84_lon = GCJ02_to_WGS84(gcj02_lat, gcj02_lon)
+            boundary.append([wgs84_lon, wgs84_lat])
         boundary.append(boundary[0])
         boundary_list.append([boundary])
     return {"type": "MultiPolygon", "coordinates": boundary_list}
@@ -120,7 +134,16 @@ def extract_ext_path(ext_path: str):
     return primary_name, secondary_name, city_name
 
 
-def generate_city_json(lines, choose_city):
+def generate_city_json(lines: list, choose_city: str) -> list:
+    """generate city json data from ok_geo.csv
+
+    Args:
+        lines (list): text lines from ok_geo.csv
+        choose_city (str): city name to choose. Only the city contains this name will be extracted.
+
+    Returns:
+        extracted city info list.
+    """
     city_list = []
     for line in lines:
         xzqh_id, deep, ext_path, geo, polygon = line
