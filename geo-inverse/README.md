@@ -1,8 +1,10 @@
 # geo-inverse-query
 
+*The subdirectory `geo-inverse-query` has been moved to the repository `github.com/convexwf/geo-inverse-query`. Thus, the directory here is deprecated and will not be maintained anymore.*
+
 This is a simple Python script that queries the region of a given latitude and longitude.
 
-## Preqrequisites
+## Prerequisites
 
 - Docker
 - Docker-compose
