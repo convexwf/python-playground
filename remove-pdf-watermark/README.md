@@ -1,0 +1,5 @@
+[利用python去除PDF水印 - 邹雷](https://www.ficapy.com/2020/03/02/delete_watermark/)
+[How do I install pymupdf in anaconda? · pymupdf/PyMuPDF · Discussion #1673](https://github.com/pymupdf/PyMuPDF/discussions/1673)
+[pymupdf/PyMuPDF: PyMuPDF is a high performance Python library for data extraction, analysis, conversion & manipulation of PDF (and other) documents.](https://github.com/pymupdf/PyMuPDF)
+[python一键去PDF水印，只需十行代码，超级简单... - 轻松学Python - 博客园](https://www.cnblogs.com/hahaa/p/16935591.html)
+[PyMuPDF Python API |高级 PDF 解析和提取](https://products.documentprocessing.com/zh/parser/python/pymupdf/)
