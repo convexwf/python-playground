@@ -19,6 +19,8 @@ if __name__ == "__main__":
         title = doc_file[dot_idx + 1 :]
         src_file = os.path.join(adoc_dir, doc_file)
         dst_file = os.path.join(adoc_dir, f"{no:04d}.{title}")
+        if src_file == dst_file:
+            continue
         # print(f"mv {src_file} {dst_file}")
         os.rename(src_file, dst_file)
 
@@ -29,5 +31,7 @@ if __name__ == "__main__":
         title = cpp_file[dot_idx + 1 :]
         src_file = os.path.join(cpp_dir, cpp_file)
         dst_file = os.path.join(cpp_dir, f"{no:04d}.{title}")
+        if src_file == dst_file:
+            continue
         # print(f"mv {src_file} {dst_file}")
         os.rename(src_file, dst_file)
