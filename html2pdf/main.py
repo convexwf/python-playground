@@ -6,12 +6,11 @@
 # @CreateDate : 2024-07-29 11:18
 # @UpdateTime : TODO
 
-import codecs
 import os
 from pathlib import Path
 
 import pdfkit
-from PyPDF2 import PdfMerger, PdfReader
+from pypdf import PdfReader, PdfWriter
 
 wkhtmltopdf_path = "D:/software/wkhtmltopdf/bin/wkhtmltopdf.exe"
 wkhtmltopdf_options = {
@@ -53,18 +52,19 @@ def merge_pdfs(pdf_root):
             continue
         output_pdf = pdf_path + ".pdf"
 
-        pdf_merger = PdfMerger()
+        pdf_merger = PdfWriter()
         for pdf in sorted(os.listdir(pdf_path)):
             if not pdf.endswith(".pdf"):
                 continue
             bookmark = pdf.replace(".pdf", "")
             absolute_pdf = Path(os.path.join(pdf_path, pdf)).as_posix()
-            with codecs.open(absolute_pdf, "rb") as fp:
-                pdf_merger.append(
-                    PdfReader(fp), outline_item=bookmark, import_outline=True
-                )
-            print(f"Merge {output_pdf}")
+            with open(absolute_pdf, "rb") as fp:
+                pd = PdfReader(fp)
+                # print(pdf, pd.outline)
+                pdf_merger.append(pd, outline_item=bookmark, import_outline=True)
+        print(f"Merge {output_pdf}")
         pdf_merger.write(output_pdf)
+        # pdf_merger.write(output_pdf)
         pdf_merger.close()
 
 
@@ -93,14 +93,11 @@ def convert_html_to_pdf(html_root, output_root):
 
 
 if __name__ == "__main__":
+    input_html_root = "html"
     output_pdf_root = "pdf"
 
-    # convert_html_to_pdf(html_path, output_pdf_path)
-
-    # wkhtmltopdf_path = "D:/software/wkhtmltopdf/bin/wkhtmltopdf.exe"
-    # config = pdfkit.configuration(wkhtmltopdf=wkhtmltopdf_path)
-    # pdfkit.from_file(html_path, output_pdf_path, options, configuration=config)
-
-    # merge_pdfs("D:/tmp/极客时间/17-深入浅出区块链")
-    # convert_html_to_pdf("D:/tmp/极客时间/17-深入浅出区块链/", "./17-深入浅出区块链/")
-    merge_pdfs("./pdf/")
+    for html_dir in os.listdir(input_html_root):
+        html_path = Path(os.path.join(input_html_root, html_dir)).as_posix()
+        pdf_path = Path(os.path.join(output_pdf_root, html_dir)).as_posix()
+        convert_html_to_pdf(html_path, pdf_path)
+    merge_pdfs(output_pdf_root)
