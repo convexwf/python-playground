@@ -1,0 +1,43 @@
+D:/OneDrive/bangumi/Yes,Minister&Yes,Prime.Minister
+Yes,Minister.S01
+1	Open Government	Mon Feb 25, 1980
+2	The Official Visit	Mon Mar 03, 1980
+3	The Economy Drive	Mon Mar 10, 1980
+4	Big Brother	Mon Mar 17, 1980
+5	The Writing on the Wall	Mon Mar 24, 1980
+6	The Right to Know	Mon Mar 31, 1980
+7	Jobs for the Boys	Mon Apr 07, 1980
+Yes,Minister.S02
+1	The Compassionate Society	Mon Feb 23, 1981
+2	Doing the Honours	Mon Mar 02, 1981
+3	The Death List	Mon Mar 09, 1981
+4	The Greasy Pole	Mon Mar 16, 1981
+5	The Devil You Know	Mon Mar 23, 1981
+6	The Quality of Life	Mon Mar 30, 1981
+7	A Question of Loyalty	Mon Apr 06, 1981
+Yes,Minister.S03
+1	Equal Opportunities	Thu Nov 11, 1982
+2	The Challenge	Thu Nov 18, 1982
+3	The Skeleton in the Closet	Thu Nov 25, 1982
+4	The Moral Dimension	Thu Dec 02, 1982
+5	The Bed Of Nails	Thu Dec 09, 1982
+6	The Whiskey Priest	Thu Dec 16, 1982
+7	The Middle Class Rip Off	Thu Dec 23, 1982
+Yes,Prime.Minister.S01
+1	Man Overboard	Thu Dec 03, 1987
+2	Official Secrets	Thu Dec 10, 1987
+3	A Diplomatic Incident	Thu Dec 17, 1987
+4	A Conflict of Interest	Thu Dec 24, 1987
+5	Power To The People	Thu Dec 31, 1987
+6	A Patron of the Arts	Fri Jan 01, 1988
+7	The National Education Service	Fri Jan 08, 1988
+8	The Tangled Web	Thu Jan 28, 1988
+Yes,Prime.Minister.S02
+1	Man Overboard	Thu Dec 03, 1987
+2	Official Secrets	Thu Dec 10, 1987
+3	A Diplomatic Incident	Thu Dec 17, 1987
+4	A Conflict of Interest	Thu Dec 24, 1987
+5	Power To The People	Thu Dec 31, 1987
+6	A Patron of the Arts	Fri Jan 01, 1988
+7	The National Education Service	Fri Jan 08, 1988
+8	The Tangled Web	Thu Jan 28, 1988

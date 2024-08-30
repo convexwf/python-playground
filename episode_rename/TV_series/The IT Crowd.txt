@@ -1,0 +1,29 @@
+D:/OneDrive/bangumi/The IT Crowd
+S01
+1	Yesterday's Jam	Feb 03, 2006
+2	Calamity Jen	Feb 03, 2006
+3	Fifty-Fifty	Feb 10, 2006
+4	The Red Door	Feb 17, 2006
+5	The Haunting Of Bill Crouse	Feb 24, 2006
+6	Aunt Irma Visits	Mar 03, 2006
+S02
+1	The Work Outing	Aug 24, 2007
+2	Return of the Golden Child	Aug 31, 2007
+3	Moss And The German	Sep 07, 2007
+4	The Dinner Party	Sep 14, 2007
+5	Smoke and Mirrors	Sep 21, 2007
+6	Men Without Women	Sep 28, 2007
+S03
+1	From Hell	Nov 21, 2008
+2	Are We Not Men	Nov 28, 2008
+3	Tramps Like Us	Dec 05, 2008
+4	The Speech	Dec 12, 2008
+5	Friendface	Dec 19, 2008
+6	Calendar Geeks	Dec 26, 2008
+S04
+1	Jen the Fredo	Jun 25, 2010
+2	The Final Countdown	Jul 02, 2010
+3	Something Happened	Jul 09, 2010
+4	Italian for Beginners	Jul 16, 2010
+5	Bad Boys	Jul 23, 2010
+6	Reynholm vs Reynholm	Jul 30, 2010
