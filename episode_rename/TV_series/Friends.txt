@@ -1,0 +1,245 @@
+D:/OneDrive/bangumi/Friends
+S01
+1	The One Where Monica Gets a Roommate	Thu Sep 22, 1994
+2	The One With the Sonogram at the End	Thu Sep 29, 1994
+3	The One With the Thumb	Thu Oct 06, 1994
+4	The One With George Stephanopoulos	Thu Oct 13, 1994
+5	The One With the East German Laundry Detergent	Thu Oct 20, 1994
+6	The One With the Butt	Thu Oct 27, 1994
+7	The One With the Blackout	Thu Nov 03, 1994
+8	The One Where Nana Dies Twice	Thu Nov 10, 1994
+9	The One Where Underdog Gets Away	Thu Nov 17, 1994
+10	The One With the Monkey	Thu Dec 15, 1994
+11	The One With Mrs. Bing	Thu Jan 05, 1995
+12	The One With the Dozen Lasagnas	Thu Jan 12, 1995
+13	The One With the Boobies	Thu Jan 19, 1995
+14	The One With the Candy Hearts	Thu Feb 09, 1995
+15	The One With the Stoned Guy	Thu Feb 16, 1995
+16	The One With Two Parts (1)	Thu Feb 23, 1995
+17	The One With Two Parts (2)	Thu Feb 23, 1995
+18	The One With All the Poker	Thu Mar 02, 1995
+19	The One Where the Monkey Gets Away	Thu Mar 09, 1995
+20	The One With the Evil Orthodontist	Thu Apr 06, 1995
+21	The One With the Fake Monica	Thu Apr 27, 1995
+22	The One With the Ick Factor	Thu May 04, 1995
+23	The One With the Birth	Thu May 11, 1995
+24	The One Where Rachel Finds Out	Thu May 18, 1995
+S02
+1	The One With Ross's New Girlfriend	Thu Sep 21, 1995
+2	The One With the Breast Milk	Thu Sep 28, 1995
+3	The One Where Heckles Dies	Thu Oct 05, 1995
+4	The One With Phoebe's Husband	Thu Oct 12, 1995
+5	The One With Five Steaks and an Eggplant	Thu Oct 19, 1995
+6	The One With the Baby on the Bus	Thu Nov 02, 1995
+7	The One Where Ross Finds Out	Thu Nov 09, 1995
+8	The One With the List	Thu Nov 16, 1995
+9	The One With Phoebe's Dad	Thu Dec 14, 1995
+10	The One With Russ	Thu Jan 04, 1996
+11	The One With the Lesbian Wedding	Thu Jan 18, 1996
+12	The One After the Superbowl (1)	Sun Jan 28, 1996
+13	The One After the Superbowl (2)	Sun Jan 28, 1996
+14	The One With the Prom Video	Thu Feb 01, 1996
+15	The One Where Ross and Rachel... You Know	Thu Feb 08, 1996
+16	The One Where Joey Moves Out	Thu Feb 15, 1996
+17	The One Where Eddie Moves In	Thu Feb 22, 1996
+18	The One Where Dr. Ramoray Dies	Thu Mar 21, 1996
+19	The One Where Eddie Won't Go	Thu Mar 28, 1996
+20	The One Where Old Yeller Dies	Thu Apr 04, 1996
+21	The One With the Bullies	Thu Apr 25, 1996
+22	The One With the Two Parties	Thu May 02, 1996
+23	The One With the Chicken Pox	Thu May 09, 1996
+24	The One With Barry and Mindy's Wedding	Thu May 16, 1996
+S03
+1	The One With the Princess Leia Fantasy	Mon Sep 16, 1996
+2	The One Where No One's Ready	Thu Sep 26, 1996
+3	The One With the Jam	Thu Oct 03, 1996
+4	The One With the Metaphorical Tunnel	Thu Oct 10, 1996
+5	The One With Frank Jr.	Thu Oct 17, 1996
+6	The One With the Flashback	Thu Oct 31, 1996
+7	The One With the Race Car Bed	Thu Nov 07, 1996
+8	The One With the Giant Poking Device	Thu Nov 14, 1996
+9	The One With the Football	Thu Nov 21, 1996
+10	The One Where Rachel Quits	Thu Dec 12, 1996
+11	The One Where Chandler Can't Remember Which Sister	Thu Jan 09, 1997
+12	The One With All the Jealousy	Thu Jan 16, 1997
+13	The One Where Monica and Richard are Just Friends	Thu Jan 30, 1997
+14	The One With Phoebe's Ex-Partner	Thu Feb 06, 1997
+15	The One Where Ross and Rachel Take a Break	Thu Feb 13, 1997
+16	The One the Morning After	Thu Feb 20, 1997
+17	The One Without the Ski Trip	Thu Mar 06, 1997
+18	The One With the Hypnosis Tape	Thu Mar 13, 1997
+19	The One With the Tiny T-Shirt	Thu Mar 27, 1997
+20	The One With the Dollhouse	Thu Apr 10, 1997
+21	The One With a Chick and a Duck	Thu Apr 17, 1997
+22	The One With the Screamer	Thu Apr 24, 1997
+23	The One With Ross's Thing	Thu May 01, 1997
+24	The One With the Ultimate Fighting Champion	Thu May 08, 1997
+25	The One at the Beach	Thu May 15, 1997
+S04
+1	The One With the Jellyfish	Thu Sep 25, 1997
+2	The One With the Cat	Thu Oct 02, 1997
+3	The One With the 'Cuffs	Thu Oct 09, 1997
+4	The One With the Ballroom Dancing	Thu Oct 16, 1997
+5	The One With Joey's New Girlfriend	Thu Oct 30, 1997
+6	The One With the Dirty Girl	Thu Nov 06, 1997
+7	The One Where Chandler Crosses the Line	Thu Nov 13, 1997
+8	The One With Chandler in a Box	Thu Nov 20, 1997
+9	The One Where They're Going to Party!	Thu Dec 11, 1997
+10	The One With the Girl from Poughkeepsie	Thu Dec 18, 1997
+11	The One With Phoebe's Uterus	Thu Jan 08, 1998
+12	The One With the Embryos	Thu Jan 15, 1998
+13	The One With Rachel's Crush	Thu Jan 29, 1998
+14	The One With Joey's Dirty Day	Thu Feb 05, 1998
+15	The One With All the Rugby	Thu Feb 26, 1998
+16	The One With the Fake Party	Thu Mar 19, 1998
+17	The One With the Free Porn	Thu Mar 26, 1998
+18	The One With Rachel's New Dress	Thu Apr 02, 1998
+19	The One With All the Haste	Thu Apr 09, 1998
+20	The One With All the Wedding Dresses	Thu Apr 16, 1998
+21	The One With the Invitation	Thu Apr 23, 1998
+22	The One With the Worst Best Man Ever	Thu Apr 30, 1998
+23	The One With Ross's Wedding-Part I	Thu May 07, 1998
+24	The One With Ross's Wedding-Part II	Thu May 07, 1998
+S05
+1	The One After Ross Says Rachel	Thu Sep 24, 1998
+2	The One With All the Kissing	Thu Oct 01, 1998
+3	The One Hundredth	Thu Oct 08, 1998
+4	The One Where Phoebe Hates PBS	Thu Oct 15, 1998
+5	The One With the Kips	Thu Oct 29, 1998
+6	The One With the Yeti	Thu Nov 05, 1998
+7	The One Where Ross Moves In	Thu Nov 12, 1998
+8	The One With All the Thanksgivings	Thu Nov 19, 1998
+9	The One With Ross's Sandwich	Thu Dec 10, 1998
+10	The One With the Inappropriate Sister	Thu Dec 17, 1998
+11	The One With All the Resolutions	Thu Jan 07, 1999
+12	The One With Chandler's Work Laugh	Thu Jan 21, 1999
+13	The One With Joey's Bag	Thu Feb 04, 1999
+14	The One Where Everybody Finds Out	Thu Feb 11, 1999
+15	The One With the Girl Who Hits Joey	Thu Feb 18, 1999
+16	The One With the Cop	Tue Feb 23, 1999
+17	The One With Rachel's Inadvertent Kiss	Thu Mar 18, 1999
+18	The One Where Rachel Smokes	Thu Apr 08, 1999
+19	The One Where Ross Can't Flirt	Thu Apr 22, 1999
+20	The One With the Ride Along	Thu Apr 29, 1999
+21	The One With the Ball	Thu May 06, 1999
+22	The One With Joey's Big Break	Thu May 13, 1999
+23	The One in Vegas (1)	Thu May 20, 1999
+24	The One in Vegas (2)	Thu May 20, 1999
+S06
+1	The One After Vegas	Thu Sep 23, 1999
+2	The One Where Ross Hugs Rachel	Thu Sep 30, 1999
+3	The One With Ross's Denial	Thu Oct 07, 1999
+4	The One Where Joey Loses His Insurance	Thu Oct 14, 1999
+5	The One With Joey's Porsche	Thu Oct 21, 1999
+6	The One on the Last Night	Thu Nov 04, 1999
+7	The One Where Phoebe Runs	Thu Nov 11, 1999
+8	The One With Ross's Teeth	Thu Nov 18, 1999
+9	The One Where Ross Got High	Thu Nov 25, 1999
+10	The One With the Routine	Thu Dec 16, 1999
+11	The One With the Apothecary Table	Thu Jan 06, 2000
+12	The One With the Joke	Thu Jan 13, 2000
+13	The One With Rachel's Sister	Thu Feb 03, 2000
+14	The One Where Chandler Can't Cry	Thu Feb 10, 2000
+15	The One That Could Have Been-Part 1	Thu Feb 17, 2000
+16	The One That Could Have Been-Part 2	Thu Feb 17, 2000
+17	The One With Unagi	Thu Feb 24, 2000
+18	The One Where Ross Dates a Student	Thu Mar 09, 2000
+19	The One With Joey's Fridge	Thu Mar 23, 2000
+20	The One With Mac and C.H.E.E.S.E.	Thu Apr 13, 2000
+21	The One Where Ross Meets Elizabeth's Dad	Thu Apr 27, 2000
+22	The One Where Paul's the Man	Thu May 04, 2000
+23	The One With the Ring	Thu May 11, 2000
+24	The One With the Proposal (1)	Thu May 18, 2000
+25	The One With the Proposal (2)	Thu May 18, 2000
+S07
+1	The One With Monica's Thunder	Thu Oct 12, 2000
+2	The One With Rachel's Book	Thu Oct 12, 2000
+3	The One With Phoebe's Cookies	Thu Oct 19, 2000
+4	The One With Rachel's Assistant	Thu Oct 26, 2000
+5	The One With the Engagement Picture	Thu Nov 02, 2000
+6	The One With the Nap Partners	Thu Nov 09, 2000
+7	The One With Ross's Library Book	Thu Nov 16, 2000
+8	The One Where Chandler Doesn't Like Dogs	Thu Nov 23, 2000
+9	The One With All the Candy	Thu Dec 07, 2000
+10	The One With the Holiday Armadillo	Thu Dec 14, 2000
+11	The One With All the Cheesecakes	Thu Jan 04, 2001
+12	The One Where They're Up All Night	Thu Jan 11, 2001
+13	The One Where Rosita Dies	Thu Feb 01, 2001
+14	The One Where They All Turn Thirty	Thu Feb 08, 2001
+15	The One With Joey's New Brain	Thu Feb 15, 2001
+16	The One With the Truth About London	Thu Feb 22, 2001
+17	The One With the Cheap Wedding Dress	Thu Mar 15, 2001
+18	The One With Joey's Award	Thu Mar 29, 2001
+19	The One With Ross and Monica's Cousin	Thu Apr 19, 2001
+20	The One With Rachel's Big Kiss	Thu Apr 26, 2001
+21	The One With the Vows	Thu May 03, 2001
+22	The One With Chandler's Dad	Thu May 10, 2001
+23	The One with Monica and Chandler's Wedding (Part 1)	Thu May 17, 2001
+24	The One with Monica and Chandler's Wedding (Part 2)	Thu May 17, 2001
+S08
+1	The One After I Do	Thu Sep 27, 2001
+2	The One With the Red Sweater	Thu Oct 04, 2001
+3	The One Where Rachel Tells Ross	Thu Oct 11, 2001
+4	The One With the Videotape	Thu Oct 18, 2001
+5	The One With Rachel's Date	Thu Oct 25, 2001
+6	The One With the Halloween Party	Thu Nov 01, 2001
+7	The One With the Stain	Thu Nov 08, 2001
+8	The One With the Stripper	Thu Nov 15, 2001
+9	The One With the Rumor	Thu Nov 22, 2001
+10	The One With Monica's Boots	Thu Dec 06, 2001
+11	The One With the Creepy Holiday Card	Thu Dec 13, 2001
+12	The One Where Joey Dates Rachel	Thu Jan 10, 2002
+13	The One Where Chandler Takes a Bath	Thu Jan 17, 2002
+14	The One With the Secret Closet	Thu Jan 31, 2002
+15	The One With the Birthing Video	Thu Feb 07, 2002
+16	The One Where Joey Tells Rachel	Thu Feb 28, 2002
+17	The One With the Tea Leaves	Thu Mar 07, 2002
+18	The One in Massapequa	Thu Mar 28, 2002
+19	The One With Joey's Interview	Thu Apr 04, 2002
+20	The One With the Baby Shower	Thu Apr 25, 2002
+21	The One With the Cooking Class	Thu May 02, 2002
+22	The One Where Rachel is Late	Thu May 09, 2002
+23	The One Where Rachel Has a Baby (1)	Thu May 16, 2002
+24	The One Where Rachel Has a Baby (2)	Thu May 16, 2002
+S09
+1	The One Where No One Proposes	Thu Sep 26, 2002
+2	The One Where Emma Cries	Thu Oct 03, 2002
+3	The One With the Pediatrician	Thu Oct 10, 2002
+4	The One With the Sharks	Thu Oct 17, 2002
+5	The One With Phoebe's Birthday Dinner	Thu Oct 31, 2002
+6	The One With the Male Nanny	Thu Nov 07, 2002
+7	The One With Ross's Inappropriate Song	Thu Nov 14, 2002
+8	The One With Rachel's Other Sister	Thu Nov 21, 2002
+9	The One With Rachel's Phone Number	Thu Dec 05, 2002
+10	The One With Christmas in Tulsa	Thu Dec 12, 2002
+11	The One Where Rachel Goes Back to Work	Thu Jan 09, 2003
+12	The One With Phoebe's Rats	Thu Jan 16, 2003
+13	The One Where Monica Sings	Thu Jan 30, 2003
+14	The One With the Blind Dates	Thu Feb 06, 2003
+15	The One With the Mugging	Thu Feb 13, 2003
+16	The One With the Boob Job	Thu Feb 20, 2003
+17	The One With the Memorial Service	Thu Mar 13, 2003
+18	The One With the Lottery	Thu Apr 03, 2003
+19	The One With Rachel's Dream	Thu Apr 17, 2003
+20	The One With the Soap Opera Party	Thu Apr 24, 2003
+21	The One With the Fertility Test	Thu May 01, 2003
+22	The One With the Donor	Thu May 08, 2003
+23-24	The One in Barbados	Thu May 15, 2003
+S10
+1	The One After Joey and Rachel Kiss	Thu Sep 25, 2003
+2	The One Where Ross is Fine	Thu Oct 02, 2003
+3	The One With Ross's Tan	Thu Oct 09, 2003
+4	The One With the Cake	Thu Oct 23, 2003
+5	The One Where Rachel's Sister Babysits	Thu Oct 30, 2003
+6	The One With Ross's Grant	Thu Nov 06, 2003
+7	The One With the Home Study	Thu Nov 13, 2003
+8	The One With the Late Thanksgiving	Thu Nov 20, 2003
+9	The One With the Birth Mother	Thu Jan 08, 2004
+10	The One Where Chandler Gets Caught	Thu Jan 15, 2004
+11	The One Where the Stripper Cries	Thu Feb 05, 2004
+12	The One With Phoebe's Wedding	Thu Feb 12, 2004
+13	The One Where Joey Speaks French	Thu Feb 19, 2004
+14	The One With Princess Consuela	Thu Feb 26, 2004
+15	The One Where Estelle Dies	Thu Apr 22, 2004
+16	The One With Rachel's Going Away Party	Thu Apr 29, 2004
+17-18	The Last One	Thu May 06, 2004
