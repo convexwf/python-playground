@@ -4,7 +4,7 @@
 # @FileName : extract_epub.py
 # @Author : convexwf@gmail.com
 # @CreateDate : 2024-11-16 15:56
-# @UpdateTime : 2024-11-16 15:56
+# @UpdateTime : 2024-11-18 18:16
 
 import os
 from collections import defaultdict
@@ -92,6 +92,7 @@ def extract_most_frequent_seven_thousand_words():
                 continue
 
     print(result.keys())
+    return result
 
 
 if __name__ == "__main__":
