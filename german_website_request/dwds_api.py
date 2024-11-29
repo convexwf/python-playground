@@ -4,7 +4,7 @@
 # @FileName : dwds_api.py
 # @Author : convexwf@gmail.com
 # @CreateDate : 2024-11-18 18:16
-# @UpdateTime : 2024-11-18 18:16
+# @UpdateTime : 2024-11-29 22:40
 
 import json
 import os
@@ -44,6 +44,22 @@ def fetch_goethe_words():
         with open(json_path, "w", encoding="utf-8") as f:
             json.dump(json_obj, f, ensure_ascii=False, indent=2)
 
+def fetch_word_ipa(word_list: list, count: int = 10):
+    """
+    Fetch the IPA of the given word list from the DWDS API
+    """
+    base_url = "https://www.dwds.de/api/ipa/?q={word}"
+    
+    result = []
+    for idx in range(0, len(word_list), count):
+        sub_list = word_list[idx: idx + count]
+        url = base_url.format(word="|".join(sub_list))
+        response = requests.get(url)
+        response.raise_for_status()
+        result.extend(response.json())
+    return result
 
 if __name__ == "__main__":
-    fetch_goethe_words()
+    # fetch_goethe_words()
+    
+    print(fetch_word_ipa(["lesen"]))
