@@ -4,7 +4,7 @@
 # @FileName : dwds_api.py
 # @Author : convexwf@gmail.com
 # @CreateDate : 2024-11-18 18:16
-# @UpdateTime : 2024-12-04 15:05
+# @UpdateTime : 2024-12-04 17:08
 
 import csv
 import json
@@ -125,18 +125,20 @@ def extract_goethe_verb_conjugation():
     Extract the Goethe verb conjugation from the csv file
     """
     with open(
-        f"{output_dir}/goethe_word/goethe_word_list.json", "r", encoding="utf-8"
+        f"{output_dir}/goethe_word/goethe_verb_list.json", "r", encoding="utf-8"
     ) as f:
         goethe_word_list = json.load(f)
 
     verb_list = []
     for goethe_word in goethe_word_list:
         Wortarten = goethe_word["Wortarten"]
-        goethe_word.pop("nur_im_Plural")
+        # goethe_word.pop("nur_im_Plural")
         if "Verb" == Wortarten:
             verb_list.append(goethe_word)
 
-    for verb in verb_list[:10]:
+    for verb in verb_list:
+        if "reverso_url" in verb:
+            continue
         Lemma = verb["Lemma"]
         is_success, conj_result_dict = fetch_reverso_conjugation(Lemma)
         if is_success:
