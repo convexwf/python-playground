@@ -1,13 +1,15 @@
 # !/usr/bin/python3
 # -*- coding: utf-8 -*-
 # @Project : python-playground
-# @FileName : check_util.py
+# @FileName : leetcode-doc/check_util.py
 # @Author : convexwf@gmail.com
 # @CreateDate : 2024-10-29 13:00
-# @UpdateTime : 2024-10-29 13:00
+# @UpdateTime : 2025-01-14 16:21
 
 import os
 import re
+
+RESOURCE_ROOT = os.environ.get("RESOURCE_ROOT", "/resource")
 
 
 def extract_non_algorithm_problems():
@@ -16,7 +18,7 @@ def extract_non_algorithm_problems():
     Returns:
         list: A list of non-algorithm problems.
     """
-    with open("resource/leetcode-tags.txt", "r", encoding="utf-8") as fp:
+    with open(f"{RESOURCE_ROOT}/leetcode-tags.txt", "r", encoding="utf-8") as fp:
         lines = fp.readlines()
     non_algorithm_list = []
     for line in lines:
@@ -84,7 +86,7 @@ def extract_lock_problems():
     Returns:
         list: A list of lock problems.
     """
-    with open("resource/leetcode-problems.txt", "r", encoding="utf-8") as fp:
+    with open(f"{RESOURCE_ROOT}/leetcode-problems.txt", "r", encoding="utf-8") as fp:
         lines = fp.readlines()
 
     lock_list = []
@@ -125,14 +127,19 @@ def extract_all_problems():
     Returns:
         list: A list of all problems.
     """
-    with open("resource/leetcode-problems.txt", "r", encoding="utf-8") as fp:
+    with open(f"{RESOURCE_ROOT}/leetcode-problems.txt", "r", encoding="utf-8") as fp:
         lines = fp.readlines()
 
-    with open("resource/leetcode-tags.txt", "r", encoding="utf-8") as fp:
+    with open(f"{RESOURCE_ROOT}/leetcode-tags.txt", "r", encoding="utf-8") as fp:
         tags_lines = fp.readlines()
 
     all_list = []
     for idx, line in enumerate(reversed(lines)):
+        if "🔒" in line:
+            is_lock = True
+        else:
+            is_lock = False
+
         sidx = line.find("[")
         line = line[sidx:].strip()
 
@@ -144,11 +151,6 @@ def extract_all_problems():
             f"{problem_id_int}-{problem_title.replace(' ', '-').lower()}"
         )
         difficulty = extract_result["difficulty"]
-
-        if "🔒" in line:
-            is_lock = True
-        else:
-            is_lock = False
 
         tag_line = tags_lines[idx]
         problem, tags = tag_line.split("\t")

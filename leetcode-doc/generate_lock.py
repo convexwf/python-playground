@@ -1,17 +1,16 @@
 # !/usr/bin/python3
 # -*- coding: utf-8 -*-
-# @Project : practice
-# @FileName : generate_lock.py
+# @Project : python-playground
+# @FileName : leetcode-doc/generate_lock.py
 # @Author : convexwf@gmail.com
 # @CreateDate : 2024-06-03 11:16
-# @UpdateTime : TODO
+# @UpdateTime : 2025-01-14 16:21
 
 import os
 import re
 
 URL = "https://leetcode.com/problems/"
 problem_txt = "leetcode-problems.txt"
-
 lock_dir = ".lock"
 cpp_dir = ".lock.cpp"
 

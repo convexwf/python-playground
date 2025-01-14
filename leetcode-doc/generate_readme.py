@@ -1,10 +1,10 @@
 # !/usr/bin/python3
 # -*- coding: utf-8 -*-
 # @Project : python-playground
-# @FileName : generate_readme.py
+# @FileName : leetcode-doc/generate_readme.py
 # @Author : convexwf@gmail.com
 # @CreateDate : 2024-05-07 10:32
-# @UpdateTime : 2024-10-29 13:00
+# @UpdateTime : 2025-01-14 16:21
 
 import os
 import re
@@ -35,6 +35,7 @@ def extract_doc_files(doc_dir):
     """
     doc_files = os.listdir(doc_dir)
     doc_list = []
+    not_solved_list = []
     for doc_file in doc_files:
         if not doc_file.endswith(".md"):
             continue
@@ -58,6 +59,21 @@ def extract_doc_files(doc_dir):
             raise Exception(f"Error: {problem_id_int} difficulty not found")
         problem_difficulty = lines[difficulty_idx + 3].split("|")[2].strip()
 
+        not_solved_list.append([
+            problem_id_int,
+            {
+                "id": problem_id_int,
+                "id_str": problem_id_str,
+                "title": problem_title,
+                "identifier": problem_identifier,
+                "url": problem_url,
+                "doc_path": problem_doc_path,
+                "difficulty": problem_difficulty,
+                "tags": [],
+                "is_lock": False,
+            },
+        ])
+
         # Extract tags
         tags_idx = -1
         for idx, line in enumerate(lines[1:]):
@@ -71,6 +87,7 @@ def extract_doc_files(doc_dir):
         if len(problem_tags) == 0:
             continue
 
+        not_solved_list.pop()
         doc_list.append(
             [
                 problem_id_int,
@@ -88,7 +105,7 @@ def extract_doc_files(doc_dir):
             ]
         )
     doc_list = sorted(doc_list, key=lambda x: x[0])
-    return doc_list
+    return doc_list, not_solved_list
 
 
 def extract_lock_files(doc_dir):
@@ -161,7 +178,7 @@ def generate_solved_condition(upper_bound: int):
     Args:
         upper_bound (int): The upper bound of the problem number.
     """
-    solved_doc_list = extract_doc_files(DOC_DIR)
+    solved_doc_list, _ = extract_doc_files(DOC_DIR)
     solved_lock_list = extract_lock_files(LOCK_DIR)
     lock_list = extract_lock_problems()
     non_algorithm_list = extract_non_algorithm_problems()
@@ -214,7 +231,7 @@ def generate_solved_condition(upper_bound: int):
 
 def generate_markdown_table(upper_bound: int):
     all_problems = extract_all_problems()
-    solved_doc_list = extract_doc_files(DOC_DIR)
+    solved_doc_list, not_solved_doc_list = extract_doc_files(DOC_DIR)
     solved_lock_list = extract_lock_files(LOCK_DIR)
     rows = sorted(solved_doc_list + solved_lock_list, key=lambda x: x[0])
     solved_numbers = set([it[0] for it in rows])
@@ -226,34 +243,7 @@ def generate_markdown_table(upper_bound: int):
         "| Title | Difficulty | Tags | Solution |\n| --- | --- | --- | --- |\n"
     )
     table_content_list = []
-
-    # Firstly, solve the [1, upper_bound] problems
-    solved_idx = 0
-    for number in range(1, upper_bound + 1):
-        if number in solved_numbers:
-            doc = solved_items[solved_idx]
-            if not doc["is_lock"]:
-                row = f"| [{doc['id_str']}.{doc['title']}]({doc['doc_path']}) | {doc['difficulty']} | {', '.join(doc['tags'])} | "
-            else:
-                row = f"| {doc['id_str']}.{doc['title']} 🔒 | | {', '.join(doc['tags'])} | "
-            cpp_exist, cpp_file = extract_cpp_files(CPP_DIR, doc["identifier"])
-            if cpp_exist:
-                row += f"[cpp]({cpp_file}) |"
-            else:
-                row += " |"
-            table_content_list.append(row)
-            solved_idx += 1
-        elif number in non_algorithm_numbers:
-            continue
-        else:
-            problem_item = all_problems[number - 1][1]
-            if problem_item["is_lock"]:
-                row = f"<!-- {problem_item['id_str']}.{problem_item['title']} 🔒 | {problem_item['difficulty']} | {', '.join(problem_item['tags'])} | -->"
-            else:
-                row = f"<!-- {problem_item['id_str']}.{problem_item['title']} | {problem_item['difficulty']} | {', '.join(problem_item['tags'])} | -->"
-            table_content_list.append(row)
-
-    for doc in solved_items[solved_idx:]:
+    for doc in solved_items:
         if not doc["is_lock"]:
             row = f"| [{doc['id_str']}.{doc['title']}]({doc['doc_path']}) | {doc['difficulty']} | {', '.join(doc['tags'])} | "
         else:
@@ -264,8 +254,21 @@ def generate_markdown_table(upper_bound: int):
         else:
             row += " |"
         table_content_list.append(row)
-    table_content = table_header + "\n".join(table_content_list) + "\n"
 
+    for number in range(1, upper_bound + 1):
+        if number in solved_numbers:
+            continue
+        elif number in non_algorithm_numbers:
+            continue
+        else:
+            problem_item = all_problems[number - 1][1]
+            if problem_item["is_lock"]:
+                row = f"<!-- {problem_item['id_str']}.{problem_item['title']} 🔒 | {problem_item['difficulty']} | {', '.join(problem_item['tags'])} | -->"
+            else:
+                row = f"<!-- {problem_item['id_str']}.{problem_item['title']} | {problem_item['difficulty']} | {', '.join(problem_item['tags'])} | -->"
+            table_content_list.append(row)
+
+    table_content = table_header + "\n".join(table_content_list) + "\n"
     table_start_idx = 0
     table_end_idx = 0
     with open(README_FILE, "r", encoding="utf-8") as fp:
