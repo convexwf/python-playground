@@ -4,7 +4,7 @@
 # @FileName : new_crawler/douban_topic.py
 # @Author : convexwf@gmail.com
 # @CreateDate : 2025-02-01 20:37
-# @UpdateTime : 2025-02-01 20:37
+# @UpdateTime : 2025-02-05 22:28
 
 import requests
 from dotenv import load_dotenv
@@ -144,4 +144,4 @@ def douban_group_topic_crawler(start=0):
 
 
 if __name__ == "__main__":
-    douban_group_topic_crawler(start=25 * 0)
+    douban_group_topic_crawler(start=25 * 1)
