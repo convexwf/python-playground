@@ -4,7 +4,7 @@
 # @FileName : new_crawler/douban_topic.py
 # @Author : convexwf@gmail.com
 # @CreateDate : 2025-02-01 20:37
-# @UpdateTime : 2025-02-05 22:28
+# @UpdateTime : 2025-03-25 16:36
 
 import requests
 from dotenv import load_dotenv
@@ -79,7 +79,7 @@ def douban_group_topic_crawler(start=0):
     }
     cookie_str = os.getenv("DOUBAN_COOKIE")
     cookies = dict(item.split("=", 1) for item in cookie_str.split("; "))
-    douban_output_json = os.getenv("DOUBAN_OUTPUT_JSON", "tmp/douban_topic_list.json")
+    douban_output_json = os.getenv("DOUBAN_OUTPUT_JSON", "tmp/天声人語.json")
 
     response = requests.get(url, headers=headers, cookies=cookies)
     if response.status_code != 200:
@@ -102,6 +102,8 @@ def douban_group_topic_crawler(start=0):
         try:
             topic_url = link.attr("href")
             topic_title: str = link.attr("title")
+            if not topic_title.startswith("【天声人語】"):
+                continue
             caption, chinese_date_str = topic_title.rsplit(" ", 1)
         except Exception as e:
             print(f"Error parsing link {link}: {e}")
@@ -110,6 +112,8 @@ def douban_group_topic_crawler(start=0):
             continue
         topic_caption = caption[len("【天声人語】") :].strip()
         topic_date = convert_date_chinese_to_format(chinese_date_str)
+        iso_year, iso_week, iso_weekday = topic_date.isocalendar()
+        topic_week = f"{iso_year}W{iso_week:02d}-{iso_weekday}"
         if topic_date.strftime("%Y-%m-%d") in existing_date_list:
             continue
 
@@ -121,6 +125,7 @@ def douban_group_topic_crawler(start=0):
                 {
                     "title": topic_caption,
                     "date": topic_date.strftime("%Y-%m-%d"),
+                    "week": topic_week,
                     "text": topic_text,
                     "translation": translation_text,
                     "href": topic_url,
@@ -144,4 +149,4 @@ def douban_group_topic_crawler(start=0):
 
 
 if __name__ == "__main__":
-    douban_group_topic_crawler(start=25 * 1)
+    douban_group_topic_crawler(start=25 * 0)
