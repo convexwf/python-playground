@@ -4,7 +4,7 @@
 # @FileName : openai_test/translate_task.py
 # @Author : convexwf@gmail.com
 # @CreateDate : 2025-02-05 22:28
-# @UpdateTime : 2025-02-07 12:40
+# @UpdateTime : 2025-03-27 16:41
 
 import os
 from dotenv import load_dotenv
@@ -100,8 +100,7 @@ def translate_english_text(text):
             translate = translate[: -len("fin")].strip()
         translate_result += translate + "\n\n"
 
-    with open("translated_output.md", "w+", encoding="utf-8") as f:
-        f.write(translate_result)
+    return translate_result
 
 
 def translate_japanese_text(text):
