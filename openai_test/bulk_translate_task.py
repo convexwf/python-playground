@@ -4,7 +4,7 @@
 # @FileName : openai_test/bulk_translate_task.py
 # @Author : convexwf@gmail.com
 # @CreateDate : 2025-03-27 16:41
-# @UpdateTime : 2025-03-27 16:41
+# @UpdateTime : 2025-03-29 17:17
 
 import json
 from translate_task import translate_english_text, translate_japanese_text
@@ -110,9 +110,9 @@ def translate_douban_topics_texts(json_path, year_week, output_dir):
             topic.get("date", "Unknown Date"), "%Y-%m-%d"
         )
         topic_week, weeknum = topic.get("week").split("-")
-        if topic_week != year_week:
-            continue
         topic_text = topic.get("text", "")
+        if topic_week != year_week or len(topic_text) <= 10:
+            continue
         topic["openai_translate"] = translate_japanese_text(topic_text)
         translated_data.append(topic)
 
@@ -123,29 +123,45 @@ def translate_douban_topics_texts(json_path, year_week, output_dir):
     with open(output_path, "w+", encoding="utf-8") as f:
         json.dump(translated_data, f, ensure_ascii=False, indent=2)
 
-    book_title = data.get("book_title", "Unknown Book")
-    chapters = data.get("chapters", [])
 
-    translated_data = []
-    for chapter in chapters:
-        chapter_title = chapter.get("title", "Unknown Chapter")
-        chapter_subtitle = chapter.get("subtitle", "")
-        chapter_content = chapter.get("content", "")
-        category = chapter.get("category", "No_Category")
-        publish_time = chapter.get("publish_time", "Unknown Date")
-        publish_date = datetime.datetime.strptime(publish_time, "%Y-%m-%d %H:%M:%S")
+def convert_douban_topics_to_md(json_path):
+    """
+    Converts translated JSON data to Markdown format.
 
-        if category != f"Week_{weeknum}":
-            continue
-        chapter["openai_translate"] = translate_japanese_text(chapter_content)
-        translated_data.append(chapter)
+    Args:
+        json_path (str): Path to the translated JSON file.
+    """
+    output_dir = os.path.dirname(json_path)
+    filename = os.path.basename(json_path)
+    filename_without_ext = os.path.splitext(filename)[0]
+    theme, year_week = filename_without_ext.split("_")[:2]
 
-    output_path = os.path.join(
+    with open(json_path, "r", encoding="utf-8") as fp:
+        data = json.load(fp)
+
+    md_lines = [
+        f"+++",
+        f'title = "{theme} - {year_week}"',
+        f"date = {year_week}",
+        f'slug = "douban_topic/{year_week.lower()}"',
+        f"+++",
+        "",
+    ]
+    for topic in data:
+        topic_title = topic.get("title", "Unknown Title")
+        topic_date = topic.get("date", "Unknown Date")
+        topic_text = topic.get("openai_translate", "")
+
+        md_lines.append(f"## {topic_title} ({topic_date})\n\n")
+        md_lines.append(f"{topic_text}\n\n")
+
+    md_content = "\n".join(md_lines)
+    md_output_path = os.path.join(
         output_dir,
-        f"{book_title}_{category}.json",
+        f"{theme}_{year_week}.md",
     )
-    with open(output_path, "w+", encoding="utf-8") as f:
-        json.dump(translated_data, f, ensure_ascii=False, indent=2)
+    with open(md_output_path, "w+", encoding="utf-8") as f:
+        f.write(md_content)
 
 
 if __name__ == "__main__":
@@ -155,12 +171,19 @@ if __name__ == "__main__":
     #     output_dir="tmp/translated/",
     # )
 
-    # convert_economist_to_md(
-    #     json_path="tmp/translated/The Economist 2025-07-05_Culture.json"
-    # )
-
     translate_douban_topics_texts(
-        json_path="tmp/douban_topic_list.json",
+        json_path="tmp/Douban Topic/天声人語.json",
         year_week="2025W27",
         output_dir="tmp/translated/",
     )
+
+    translated_dir = "tmp/translated/"
+    for json_file in os.listdir(translated_dir):
+        if not json_file.endswith(".json"):
+            continue
+        if json_file.startswith("天声人語_"):
+            json_path = os.path.join(translated_dir, json_file)
+            convert_douban_topics_to_md(json_path=json_path)
+        elif json_file.startswith("The Economist"):
+            json_path = os.path.join(translated_dir, json_file)
+            convert_economist_to_md(json_path=json_path)
