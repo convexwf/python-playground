@@ -4,7 +4,7 @@
 # @FileName : openai_test/bulk_translate_task.py
 # @Author : convexwf@gmail.com
 # @CreateDate : 2025-03-27 16:41
-# @UpdateTime : 2025-03-29 17:17
+# @UpdateTime : 2025-04-02 17:38
 
 import json
 from translate_task import translate_english_text, translate_japanese_text
@@ -171,11 +171,11 @@ if __name__ == "__main__":
     #     output_dir="tmp/translated/",
     # )
 
-    translate_douban_topics_texts(
-        json_path="tmp/Douban Topic/天声人語.json",
-        year_week="2025W27",
-        output_dir="tmp/translated/",
-    )
+    # translate_douban_topics_texts(
+    #     json_path="tmp/Douban Topic/天声人語.json",
+    #     year_week="2025W27",
+    #     output_dir="tmp/translated/",
+    # )
 
     translated_dir = "tmp/translated/"
     for json_file in os.listdir(translated_dir):
