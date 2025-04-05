@@ -4,15 +4,16 @@
 # @FileName : ffmpeg_python/concat.py
 # @Author : convexwf@gmail.com
 # @CreateDate : 2025-04-04 16:08
-# @UpdateTime : 2025-04-04 16:08
+# @UpdateTime : 2025-04-05 16:23
 
 import os
 import glob
 import ffmpeg
+import tempfile
 
 # 配置
 video_folder = "C:/Users/convexwf/OneDrive/documents/Language/Spanish/新东方西班牙语直通车/02.西班牙语欧标A1直通车(8课,99节全)/第一册 第01课"
-output_video = "西语A1课程_01.mp4"
+output_video = "C:/Users/convexwf/Downloads/output.mp4"
 max_duration = 3600  # 1小时，秒
 
 
@@ -51,6 +52,30 @@ def get_video_info(filepath):
         "fps": fps,
         "duration": duration,
     }
+
+
+def concatenate_videos_with_same_codec(video_list, output_filename):
+    """
+    Concatenate a list of video files with the same codec into a single output file.
+
+    Args:
+        video_list (list): List of video file paths to concatenate.
+        output_filename (str): Output file name for the concatenated video.
+    """
+    with tempfile.NamedTemporaryFile(
+        mode="w+", suffix=".txt", delete=False, encoding="utf-8"
+    ) as fp:
+        for video in video_list:
+            fp.write(f"file '{video}'\n")
+        temp_file = fp.name
+
+    try:
+        ffmpeg.input(temp_file, format="concat", safe=0).output(output_filename).run(
+            overwrite_output=True
+        )
+        print(f"Successfully created {output_filename}")
+    except ffmpeg.Error as e:
+        print(f"Error concatenating videos: {e}")
 
 
 def concatenate_video_list(video_list, output_filename):
@@ -111,9 +136,11 @@ if __name__ == "__main__":
     #         print(
     #             f"Found video: {video} duration: {get_video_duration(os.path.join(video_folder, video))} seconds"
     #         )
-    video_list = sorted(glob.glob(os.path.join(video_folder, "*.mp4")))[:10]
-    for video in video_list:
-        vedio_info = get_video_info(video)
-        print(f"Video: {video}, Info: {vedio_info}")
-    # output_video = os.path.join(video_folder, output_video)
-    # concatenate_video_list(video_list, output_video)
+    video_list = sorted(glob.glob(os.path.join(video_folder, "*.mp4")))[:3]
+    concatenate_videos_with_same_codec(video_list, output_video)
+
+    # for video in video_list:
+    #     vedio_info = get_video_info(video)
+    #     print(f"Video: {video}, Info: {vedio_info}")
+    # # output_video = os.path.join(video_folder, output_video)
+    # # concatenate_video_list(video_list, output_video)
