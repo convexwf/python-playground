@@ -4,7 +4,7 @@
 # @FileName : ffmpeg_python/concat.py
 # @Author : convexwf@gmail.com
 # @CreateDate : 2025-04-04 16:08
-# @UpdateTime : 2025-04-05 16:23
+# @UpdateTime : 2025-04-07 16:53
 
 import os
 import glob
@@ -38,8 +38,10 @@ def get_video_info(filepath):
     codec = video_stream["codec_name"]
     width = int(video_stream["width"])
     height = int(video_stream["height"])
-    duration = float(video_stream["duration"])  # in seconds
     fps_str = video_stream["r_frame_rate"]  # e.g. "30/1"
+
+    _format = probe["format"]
+    duration = float(_format["duration"])  # in seconds
 
     # Calculate frames per second (fps)
     num, denom = map(int, fps_str.split("/"))
@@ -70,77 +72,41 @@ def concatenate_videos_with_same_codec(video_list, output_filename):
         temp_file = fp.name
 
     try:
-        ffmpeg.input(temp_file, format="concat", safe=0).output(output_filename).run(
-            overwrite_output=True
-        )
+        ffmpeg.input(temp_file, format="concat", safe=0).output(
+            output_filename
+        ).global_args("-loglevel", "error").run(overwrite_output=True)
         print(f"Successfully created {output_filename}")
     except ffmpeg.Error as e:
         print(f"Error concatenating videos: {e}")
 
 
-def concatenate_video_list(video_list, output_filename):
+def classify_videos_by_duration(video_list, max_total_duration):
     """
-    Concatenate a list of video files into a single output file.
+    Classify a list of video files into groups where each group's total duration does not exceed max_total_duration.
 
     Args:
-        video_list (list): List of video file paths to concatenate.
-        output_filename (str): Output file name for the concatenated video.
+        video_list (list): List of video file paths.
+        max_total_duration (int): Maximum total duration for each group in seconds.
+
+    Returns:
+        list: A list of lists, where each inner list contains video file paths.
     """
-    inputs = [ffmpeg.input(f) for f in video_list]
-    # Use concatenation filter to join videos (assuming same codec)
-    joined = ffmpeg.concat(*inputs, v=1, a=1).output(output_filename)
-    try:
-        ffmpeg.run(joined, overwrite_output=True)
-        print(f"Successfully created {output_filename}")
-    except ffmpeg.Error as e:
-        print(f"Error concatenating videos: {e}")
-
-
-def classify_videos_by_duration(files, max_total_duration):
-    """将视频列表按时长分类，每段不超过 max_total_duration"""
     categorized = []
     current_list = []
     current_time = 0
 
-    for file in files:
-        duration = get_video_duration(file)
+    for video in video_list:
+        duration = get_video_info(video)["duration"]
 
         if current_time + duration > max_total_duration and current_list:
-            # 超过限制，保存当前列表
             categorized.append(current_list)
             current_list = []
             current_time = 0
 
-        current_list.append(file)
+        current_list.append(video)
         current_time += duration
 
-    # 添加最后一组
     if current_list:
         categorized.append(current_list)
 
     return categorized
-
-
-def main():
-    files = sorted(glob.glob(os.path.join(video_folder, "*.mp4")))
-    categorized_lists = classify_videos_by_duration(files, max_duration)
-
-    for idx, video_list in enumerate(categorized_lists, start=1):
-        output_file = f"{output_prefix}{idx}.mp4"
-        concatenate_video_list(video_list, output_file)
-
-
-if __name__ == "__main__":
-    # for video in sorted(os.listdir(video_folder)):
-    #     if video.endswith(".mp4"):
-    #         print(
-    #             f"Found video: {video} duration: {get_video_duration(os.path.join(video_folder, video))} seconds"
-    #         )
-    video_list = sorted(glob.glob(os.path.join(video_folder, "*.mp4")))[:3]
-    concatenate_videos_with_same_codec(video_list, output_video)
-
-    # for video in video_list:
-    #     vedio_info = get_video_info(video)
-    #     print(f"Video: {video}, Info: {vedio_info}")
-    # # output_video = os.path.join(video_folder, output_video)
-    # # concatenate_video_list(video_list, output_video)
