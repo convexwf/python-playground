@@ -4,7 +4,7 @@
 # @FileName : new_crawler/nachrichtenleicht.py
 # @Author : convexwf@gmail.com
 # @CreateDate : 2025-04-08 11:17
-# @UpdateTime : 2025-04-08 11:17
+# @UpdateTime : 2025-04-09 12:25
 
 import requests
 from pyquery import PyQuery as pq
@@ -12,6 +12,11 @@ import time
 import re
 import json
 from typing import List, Dict, Optional
+import datetime
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 class NachrichtenleichtCrawler:
@@ -111,6 +116,14 @@ class NachrichtenleichtCrawler:
             summary_tag = doc("p.article-header-description").eq(0)
             summary = summary_tag.text().strip() if summary_tag else ""
 
+            # Extract date from time tag in article header
+            date_tag = doc("time").eq(0)
+            date = (
+                datetime.datetime.strptime(date_tag.text().strip(), "%d.%m.%Y")
+                if date_tag
+                else None
+            )
+
             # Extract main content paragraphs
             doc.remove("figure")  # Remove any figure tags to avoid images
             paragraphs = doc(
@@ -150,6 +163,7 @@ class NachrichtenleichtCrawler:
                 "title": title,
                 "summary": summary if summary else "No summary found",
                 "content": "\n\n".join(article_content),
+                "date": date.strftime("%Y-%m-%d") if date else "No date found",
                 "url": url,
             }
 
@@ -173,9 +187,13 @@ class NachrichtenleichtCrawler:
         """
         print("Step 1: Getting article list...")
         article_list = self.get_article_list(list_url)
+        article_list = self.filter_existing_articles(
+            article_list,
+            os.getenv("NACHRICHTENLEICH_OUTPUT_JSON", "tmp/nachrichtenleicht.json"),
+        )
 
         if not article_list:
-            print("No articles found")
+            print("No new articles found")
             return []
 
         # Limit number of articles
@@ -202,12 +220,45 @@ class NachrichtenleichtCrawler:
         )
         return detailed_articles
 
-    def save_to_json(
-        self, articles: List[Dict[str, str]], filename: str = "articles.json"
-    ):
+    def filter_existing_articles(
+        self, articles: List[Dict[str, str]], existing_file: str
+    ) -> List[Dict[str, str]]:
+        """
+        Filter out articles that already exist in the existing JSON file.
+
+        Args:
+            articles: List of articles to filter
+            existing_file: Path to the existing JSON file
+
+        Returns:
+            List of articles that do not exist in the existing file
+        """
+
+        if not os.path.exists(existing_file):
+            return articles
+
+        with open(existing_file, "r", encoding="utf-8") as f:
+            existing_data = json.load(f)
+            existing_urls = {article["url"] for article in existing_data}
+
+        new_articles = [
+            article for article in articles if article["url"] not in existing_urls
+        ]
+        print(f"Filtered out {len(articles) - len(new_articles)} existing articles")
+        return new_articles
+
+    def save_to_json(self, articles: List[Dict[str, str]]):
         """Save articles to JSON file"""
+        with open(
+            os.getenv("NACHRICHTENLEICH_OUTPUT_JSON"), "r", encoding="utf-8"
+        ) as f:
+            existing_articles = json.load(f)
+        articles = existing_articles + articles
+        articles.sort(key=lambda x: x["date"], reverse=True)
+
         try:
-            with open(filename, "w", encoding="utf-8") as f:
+            filename = os.getenv("NACHRICHTENLEICH_OUTPUT_JSON")
+            with open(filename, "w+", encoding="utf-8") as f:
                 json.dump(articles, f, ensure_ascii=False, indent=2)
             print(f"Articles saved to {filename}")
         except Exception as e:
@@ -233,11 +284,12 @@ def main():
         print(f"Title: {article['title']}")
         print(f"Summary: {article['summary'][:100]}...")
         print(f"Content length: {len(article['content'])} characters")
+        print(f"Date: {article['date']}")
         print(f"URL: {article['url']}")
 
     # Save to file
     if articles:
-        crawler.save_to_json(articles, "tmp/nachrichtenleicht_articles.json")
+        crawler.save_to_json(articles)
 
 
 if __name__ == "__main__":
