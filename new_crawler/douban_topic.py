@@ -4,7 +4,7 @@
 # @FileName : new_crawler/douban_topic.py
 # @Author : convexwf@gmail.com
 # @CreateDate : 2025-02-01 20:37
-# @UpdateTime : 2025-04-02 17:38
+# @UpdateTime : 2025-04-10 14:33
 
 import requests
 from dotenv import load_dotenv
@@ -102,13 +102,11 @@ def douban_group_topic_crawler(start=0):
         try:
             topic_url = link.attr("href")
             topic_title: str = link.attr("title")
-            if not topic_title.startswith("【天声人語】"):
+            if len(topic_title) < 5 or not topic_title[1:5] == "天声人語":
                 continue
             caption, chinese_date_str = topic_title.rsplit(" ", 1)
         except Exception as e:
             print(f"Error parsing link {link}: {e}")
-            continue
-        if not caption.startswith("【天声人語】"):
             continue
         topic_caption = caption[len("【天声人語】") :].strip()
         topic_date = convert_date_chinese_to_format(chinese_date_str)
@@ -149,4 +147,4 @@ def douban_group_topic_crawler(start=0):
 
 
 if __name__ == "__main__":
-    douban_group_topic_crawler(start=25 * 2)
+    douban_group_topic_crawler(start=25 * 0)
