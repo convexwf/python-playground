@@ -4,17 +4,12 @@
 # @FileName : ffmpeg_python/concat.py
 # @Author : convexwf@gmail.com
 # @CreateDate : 2025-04-04 16:08
-# @UpdateTime : 2025-04-07 16:53
+# @UpdateTime : 2025-04-15 21:23
 
 import os
 import glob
 import ffmpeg
 import tempfile
-
-# 配置
-video_folder = "C:/Users/convexwf/OneDrive/documents/Language/Spanish/新东方西班牙语直通车/02.西班牙语欧标A1直通车(8课,99节全)/第一册 第01课"
-output_video = "C:/Users/convexwf/Downloads/output.mp4"
-max_duration = 3600  # 1小时，秒
 
 
 def get_video_info(filepath):
@@ -64,6 +59,14 @@ def concatenate_videos_with_same_codec(video_list, output_filename):
         video_list (list): List of video file paths to concatenate.
         output_filename (str): Output file name for the concatenated video.
     """
+    if len(video_list) == 0:
+        print("No videos to concatenate.")
+        return
+    if len(video_list) == 1:
+        os.rename(video_list[0], output_filename)
+        print(f"Single video copied to {output_filename}")
+        return
+
     with tempfile.NamedTemporaryFile(
         mode="w+", suffix=".txt", delete=False, encoding="utf-8"
     ) as fp:
@@ -96,17 +99,14 @@ def classify_videos_by_duration(video_list, max_total_duration):
     current_time = 0
 
     for video in video_list:
-        duration = get_video_info(video)["duration"]
-
-        if current_time + duration > max_total_duration and current_list:
+        if current_time > max_total_duration and current_list:
             categorized.append(current_list)
             current_list = []
             current_time = 0
-
-        current_list.append(video)
+        duration = get_video_info(video)["duration"]
         current_time += duration
-
-    if current_list:
+        current_list.append(video)
+    if len(current_list) > 0:
         categorized.append(current_list)
 
     return categorized

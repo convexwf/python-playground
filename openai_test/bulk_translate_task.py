@@ -4,7 +4,7 @@
 # @FileName : openai_test/bulk_translate_task.py
 # @Author : convexwf@gmail.com
 # @CreateDate : 2025-03-27 16:41
-# @UpdateTime : 2025-04-11 14:53
+# @UpdateTime : 2025-04-15 21:23
 
 import json
 from translate_task import (
@@ -116,7 +116,7 @@ def convert_economist_to_md(json_path):
         output_dir,
         f"{booktitle}_{category}.md",
     )
-    with open(md_output_path, "w+", encoding="utf-8") as f:
+    with open(md_output_path, "w+", encoding="utf-8", newline="\n") as f:
         f.write(md_content)
 
 
@@ -192,7 +192,7 @@ def convert_douban_topics_to_md(json_path):
         output_dir,
         f"{theme}_{year_week}.md",
     )
-    with open(md_output_path, "w+", encoding="utf-8") as f:
+    with open(md_output_path, "w+", encoding="utf-8", newline="\n") as f:
         f.write(md_content)
 
 
@@ -259,50 +259,39 @@ def convert_nachrichtenleicht_to_md(json_path):
 
     md_content = "\n".join(md_lines)
     md_output_path = os.path.join(output_dir, f"{filename_without_ext}.md")
-    with open(md_output_path, "w+", encoding="utf-8") as f:
+    with open(md_output_path, "w+", encoding="utf-8", newline="\n") as f:
         f.write(md_content)
 
 
 if __name__ == "__main__":
-    # translate_economics_culture_texts(
-    #     json_path="tmp/The Economist/The Economist 2025-07-05.json",
-    #     topic="Culture",
-    #     output_dir="tmp/translated/",
-    # )
 
-    # translate_douban_topics_texts(
-    #     json_path="tmp/Douban Topic/天声人語.json",
-    #     year_week="2025W27",
-    #     output_dir="tmp/translated/",
-    # )
-
-    # 2. Translate Douban topics
-    year_week = "2025W28"
-    translate_douban_topics_texts(
-        json_path="tmp/Douban Topic/天声人語.json",
-        year_week=year_week,
+    # 1. Translate The Economist texts
+    date = "2025-07-26"
+    translate_economist_texts(
+        json_path=f"tmp/The Economist/The Economist {date}.json",
+        topic="Culture",
         output_dir="tmp/translated/",
     )
-    convert_douban_topics_to_md(json_path=f"tmp/translated/天声人語_{year_week}.json")
+    convert_economist_to_md(
+        json_path=f"tmp/translated/The Economist {date}_Culture.json"
+    )
+
+    # 2. Translate Douban topics
+    # year_week = "2025W28"
+    # translate_douban_topics_texts(
+    #     json_path="tmp/Douban Topic/天声人語.json",
+    #     year_week=year_week,
+    #     output_dir="tmp/translated/",
+    # )
+    # convert_douban_topics_to_md(json_path=f"tmp/translated/天声人語_{year_week}.json")
 
     # 3. Translate Nachrichtenleicht articles
-    # date = "2025-07-25"
+    # date = "2025-07-18"
     # translate_nachrichtenleicht_texts(
     #     json_path="tmp/nachrichtenleicht/nachrichtenleicht.json",
-    #     date=date
+    #     date=date,
     #     output_dir="tmp/translated/",
     # )
     # convert_nachrichtenleicht_to_md(
     #     json_path=f"tmp/translated/nachrichtenleicht_{date}.json"
     # )
-
-    # translated_dir = "tmp/translated/"
-    # for json_file in os.listdir(translated_dir):
-    #     if not json_file.endswith(".json"):
-    #         continue
-    #     if json_file.startswith("天声人語_"):
-    #         json_path = os.path.join(translated_dir, json_file)
-    #         convert_douban_topics_to_md(json_path=json_path)
-    #     elif json_file.startswith("The Economist"):
-    #         json_path = os.path.join(translated_dir, json_file)
-    #         convert_economist_to_md(json_path=json_path)

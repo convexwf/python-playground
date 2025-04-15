@@ -4,7 +4,7 @@
 # @FileName : new_crawler/economics_parse.py
 # @Author : convexwf@gmail.com
 # @CreateDate : 2025-01-29 17:33
-# @UpdateTime : 2025-02-07 12:40
+# @UpdateTime : 2025-04-15 21:23
 
 import ebooklib
 from ebooklib import epub
@@ -44,7 +44,9 @@ def parse_economics_epub(epub_file, output_dir="tmp/"):
             continue
 
         title_block = doc("span[class='calibre7']")
-        subtitle_block = doc("span[class='calibre_11'], span[class='calibre_12']")
+        subtitle_block = doc(
+            "span[class='calibre_10'], span[class='calibre_11'], span[class='calibre_12']"
+        )
         publish_time_addr_block = doc("span[class='calibre_5']")
         content_block_list = list(doc("p[class='calibre_4']").items())
         if not title_block or not subtitle_block:
