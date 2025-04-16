@@ -4,7 +4,7 @@
 # @FileName : leetcode-doc/check_util.py
 # @Author : convexwf@gmail.com
 # @CreateDate : 2024-10-29 13:00
-# @UpdateTime : 2025-01-14 16:21
+# @UpdateTime : 2025-04-16 20:52
 
 import os
 import re
@@ -151,6 +151,7 @@ def extract_all_problems():
             f"{problem_id_int}-{problem_title.replace(' ', '-').lower()}"
         )
         difficulty = extract_result["difficulty"]
+        percentage = extract_result["percentage"]
 
         tag_line = tags_lines[idx]
         problem, tags = tag_line.split("\t")
@@ -169,6 +170,7 @@ def extract_all_problems():
                     "title": problem_title,
                     "identifier": problem_identifier,
                     "difficulty": difficulty,
+                    "percentage": percentage,
                     "tags": tags,
                     "is_lock": is_lock,
                 },

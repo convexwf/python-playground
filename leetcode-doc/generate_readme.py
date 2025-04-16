@@ -4,7 +4,7 @@
 # @FileName : leetcode-doc/generate_readme.py
 # @Author : convexwf@gmail.com
 # @CreateDate : 2024-05-07 10:32
-# @UpdateTime : 2025-01-14 16:21
+# @UpdateTime : 2025-04-16 20:52
 
 import os
 import re
@@ -24,7 +24,7 @@ CPP_DIR = os.path.join(LEETCODE_ROOT, ".cpp")
 README_FILE = os.path.join(LEETCODE_ROOT, "README.md")
 
 
-def extract_doc_files(doc_dir):
+def extract_doc_files(doc_dir=DOC_DIR):
     """Extract doc files.
 
     Args:
@@ -108,7 +108,7 @@ def extract_doc_files(doc_dir):
     return doc_list, not_solved_list
 
 
-def extract_lock_files(doc_dir):
+def extract_lock_files(doc_dir=LOCK_DIR):
     """Extract lock files.
 
     Args:
@@ -118,7 +118,8 @@ def extract_lock_files(doc_dir):
         list: A list of lock files.
     """
     doc_files = os.listdir(doc_dir)
-    doc_list = []
+    solved_doc_list = []
+    notsolved_doc_list = []
     for doc_file in doc_files:
         if not doc_file.endswith(".md"):
             continue
@@ -131,6 +132,23 @@ def extract_lock_files(doc_dir):
         problem_identifier = doc_file[:-3]
         problem_url = result.group(3)
         problem_doc_path = os.path.join(".lock", doc_file)
+
+        notsolved_doc_list.append(
+            [
+                problem_id_int,
+                {
+                    "id": problem_id_int,
+                    "id_str": problem_id_str,
+                    "title": problem_title,
+                    "identifier": problem_identifier,
+                    "url": problem_url,
+                    "doc_path": problem_doc_path,
+                    "difficulty": "",
+                    "tags": [],
+                    "is_lock": True,
+                },
+            ]
+        )
 
         # Extract tags
         tags_idx = -1
@@ -145,7 +163,8 @@ def extract_lock_files(doc_dir):
         if len(problem_tags) == 0:
             continue
 
-        doc_list.append(
+        notsolved_doc_list.pop()
+        solved_doc_list.append(
             [
                 problem_id_int,
                 {
@@ -161,12 +180,12 @@ def extract_lock_files(doc_dir):
                 },
             ]
         )
-    doc_list = sorted(doc_list, key=lambda x: x[0])
-    return doc_list
+    solved_doc_list = sorted(solved_doc_list, key=lambda x: x[0])
+    return solved_doc_list, notsolved_doc_list
 
 
-def extract_cpp_files(cpp_dir, identifier):
-    cpp_file = os.path.join(cpp_dir, f"{identifier}.cpp")
+def extract_cpp_files(identifier):
+    cpp_file = os.path.join(CPP_DIR, f"{identifier}.cpp")
     if not os.path.exists(cpp_file):
         return False, ""
     return True, f".cpp/{identifier}.cpp"
@@ -232,7 +251,7 @@ def generate_solved_condition(upper_bound: int):
 def generate_markdown_table(upper_bound: int):
     all_problems = extract_all_problems()
     solved_doc_list, not_solved_doc_list = extract_doc_files(DOC_DIR)
-    solved_lock_list = extract_lock_files(LOCK_DIR)
+    solved_lock_list, not_solved_doc_list = extract_lock_files(LOCK_DIR)
     rows = sorted(solved_doc_list + solved_lock_list, key=lambda x: x[0])
     solved_numbers = set([it[0] for it in rows])
     solved_items = [it[1] for it in rows]
