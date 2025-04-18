@@ -1,10 +1,10 @@
 # !/usr/bin/python3
 # -*- coding: utf-8 -*-
-# @Project : episode_rename
-# @FileName : main.py
+# @Project : python-playground
+# @FileName : episode_rename/main.py
 # @Author : convexwf@gmail.com
 # @CreateDate : 2024-08-30 20:49
-# @UpdateTime : TODO
+# @UpdateTime : 2025-04-18 21:20
 
 import os
 import re
@@ -51,8 +51,9 @@ def rename_tv_series(config):
         if not line[0].isdigit():
             name_list.append([line.strip()])
         else:
+            count = int(line.split("\t")[0])
             episode = line.split("\t")[1]
-            name_list[-1].append(episode.strip())
+            name_list[-1].append([count, episode])
 
     video_dir = lines[0].strip()
     for season in name_list:
@@ -61,13 +62,13 @@ def rename_tv_series(config):
         if len(season[1:]) != len(src_episode_list):
             print(f"{config} Season {season_name} episode number mismatch")
             continue
-        count = 1
         for src, dst in zip(src_episode_list, season[1:]):
             suffix = src.split(".")[-1]
-            dst = f"{season_name}E{count:02d}.{dst}.{suffix}"
+            dst_count = dst[0]
+            dst_name = dst[1]
+            dst = f"{season_name}E{dst_count:02d}.{dst_name}.{suffix}"
             print(f"{src} -> {dst} {is_valid_filename(dst)}")
-            # os.rename(f"{video_dir}/{season_name}/{src}", f"{video_dir}/{season_name}/{dst}")
-            count += 1
+            os.rename(f"{video_dir}/{season_name}/{src}", f"{video_dir}/{season_name}/{dst}")
 
 def rename_anime(config):
     # https://ja.wikipedia.org/wiki/
@@ -112,11 +113,11 @@ if __name__ == "__main__":
     # rename_tv_series("Friends")
     # rename_tv_series("The IT Crowd")
     # rename_tv_series("Yes,Minister&Yes,Prime.Minister")
-    # rename_tv_series("How I Met Your Mother")
+    rename_tv_series("How I Met Your Mother")
     
     # rename_anime("月刊少女野崎くん")
     # rename_anime("けいおん")
-    rename_anime("氷菓")
+    # rename_anime("氷菓")
     
     # rename_drama("半沢直樹")
     # rename_drama("アンナチュラル")
