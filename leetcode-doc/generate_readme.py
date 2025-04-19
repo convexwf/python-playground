@@ -4,7 +4,7 @@
 # @FileName : leetcode-doc/generate_readme.py
 # @Author : convexwf@gmail.com
 # @CreateDate : 2024-05-07 10:32
-# @UpdateTime : 2025-04-16 20:52
+# @UpdateTime : 2025-04-19 21:57
 
 import os
 import re
@@ -20,6 +20,7 @@ LEETCODE_ROOT = os.environ.get("LEETCODE_ROOT", "/leetcode")
 DOC_DIR = os.path.join(LEETCODE_ROOT, ".doc")
 LOCK_DIR = os.path.join(LEETCODE_ROOT, ".lock")
 CPP_DIR = os.path.join(LEETCODE_ROOT, ".cpp")
+RUST_DIR = os.path.join(LEETCODE_ROOT, ".rust")
 
 README_FILE = os.path.join(LEETCODE_ROOT, "README.md")
 
@@ -75,15 +76,19 @@ def extract_doc_files(doc_dir=DOC_DIR):
         ])
 
         # Extract tags
-        tags_idx = -1
+        tags_start_idx = -1
         for idx, line in enumerate(lines[1:]):
             if "**标签**" in line:
-                tags_idx = idx
+                tags_start_idx = idx + 3
                 break
-        if tags_idx == -1:
+        if tags_start_idx == -1:
             continue
-            # raise Exception(f"Error: {problem_id} tags not found")
-        problem_tags = [it[2:].strip() for it in lines[tags_idx + 3 :]]
+        problem_tags = []
+        for line in lines[tags_start_idx:]:
+            if not line.startswith("- "):
+                break
+            problem_tag = line[2:].strip()
+            problem_tags.append(problem_tag)
         if len(problem_tags) == 0:
             continue
 
@@ -151,15 +156,19 @@ def extract_lock_files(doc_dir=LOCK_DIR):
         )
 
         # Extract tags
-        tags_idx = -1
+        tags_start_idx = -1
         for idx, line in enumerate(lines[1:]):
             if "**标签**" in line:
-                tags_idx = idx
+                tags_start_idx = idx + 3
                 break
-        if tags_idx == -1:
+        if tags_start_idx == -1:
             continue
-            # raise Exception(f"Error: {problem_id} tags not found")
-        problem_tags = [it[2:].strip() for it in lines[tags_idx + 3 :]]
+        problem_tags = []
+        for line in lines[tags_start_idx:]:
+            if not line.startswith("- "):
+                break
+            problem_tag = line[2:].strip()
+            problem_tags.append(problem_tag)
         if len(problem_tags) == 0:
             continue
 
@@ -190,6 +199,11 @@ def extract_cpp_files(identifier):
         return False, ""
     return True, f".cpp/{identifier}.cpp"
 
+def extract_rust_files(identifier):
+    rust_file = os.path.join(RUST_DIR, f"{identifier}.rs")
+    if not os.path.exists(rust_file):
+        return False, ""
+    return True, f".rust/{identifier}.rs"
 
 def generate_solved_condition(upper_bound: int):
     """Generate solved condition.
