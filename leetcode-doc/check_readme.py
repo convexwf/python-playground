@@ -4,7 +4,7 @@
 # @FileName : leetcode-doc/check_readme.py
 # @Author : convexwf@gmail.com
 # @CreateDate : 2025-04-16 20:52
-# @UpdateTime : 2025-04-19 21:57
+# @UpdateTime : 2025-04-21 13:19
 
 import os
 from collections import defaultdict
@@ -166,8 +166,8 @@ def generate_md_code(code_info_dict):
     # <!-- code start -->
     # <!-- code end -->
     for id_str, code_info in code_info_dict.items():
-        if id_str not in ["0001", "0002", "0003"]:
-            continue
+        # if id_str not in ["0001", "0002", "0003"]:
+        #     continue
         doc_path = code_info["doc_path"]
 
         code_content_list = ["## Code\n\n"]
@@ -215,8 +215,6 @@ def generate_md_code(code_info_dict):
 
 def clean_md_code(code_info_dict):
     for id_str, code_info in code_info_dict.items():
-        if id_str not in ["0001", "0002", "0003"]:
-            continue
         doc_path = code_info["doc_path"]
         with open(os.path.join(LEETCODE_ROOT, doc_path), "r+", encoding="utf-8") as fp:
             lines = fp.readlines()
