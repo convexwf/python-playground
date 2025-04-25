@@ -4,7 +4,7 @@
 # @FileName : bbc_learning_english_6min/parse_transcript_pyquery.py
 # @Author : convexwf@gmail.com
 # @CreateDate : 2025-04-24 22:15
-# @UpdateTime : 2025-04-24 22:15
+# @UpdateTime : 2025-04-25 23:04
 """
 Parse BBC Learning English local HTML -> Markdown using pyquery.
 Adds hierarchy by h3 sections and includes title + publish time at top.
@@ -13,6 +13,7 @@ Usage:
     python tools/parse_transcript_pyquery.py ./data/bbc_260122.html -o ./data/bbc_260122.md
 """
 import argparse
+import html as html_lib
 import json
 import re
 from pathlib import Path
@@ -20,7 +21,8 @@ from typing import Dict, List, Optional, Tuple
 
 from pyquery import PyQuery as pq
 
-SPEAKER_RE = re.compile(r"^\s*([A-Za-z][A-Za-z .'-]{0,30})\s*:\s*(.+)$")
+SPEAKER_RE = re.compile(r"^\s*([A-Za-z][A-Za-z .']{0,40})\s*:\s*(.+)$")
+SPEAKER_TITLES = {"mr", "mrs", "ms", "dr", "prof", "sir", "lady"}
 
 
 def extract_title(doc: pq) -> str:
@@ -132,6 +134,13 @@ def _collect_vocabulary(container: pq, start_node: pq) -> List[str]:
         candidates.extend(list(node.find("p, li").items()))
 
         for p in candidates:
+            block_html = (p.html() or "").lower()
+            if block_html and "<br" in block_html and len(p.find("strong")) >= 1:
+                block_items = _parse_vocabulary_block(p)
+                if block_items:
+                    items.extend(block_items)
+                    continue
+
             strong = p.find("strong").eq(0)
             term = (strong.text() or "").strip()
             if not term:
@@ -197,6 +206,52 @@ def _collect_after(container: pq, start_node: pq) -> List[str]:
     return items
 
 
+def _parse_vocabulary_block(p: pq) -> List[str]:
+    raw_html = (p.html() or "").strip()
+    if not raw_html:
+        return []
+
+    html_text = raw_html.replace("&nbsp;", " ")
+    html_text = re.sub(r"<br\s*/?>", "\n", html_text, flags=re.I)
+    html_text = re.sub(
+        r"<strong>\s*([^<]+?)\s*</strong>",
+        r"\nTERM:\1\n",
+        html_text,
+        flags=re.I,
+    )
+    text = re.sub(r"<[^>]+>", "", html_text)
+    text = html_lib.unescape(text)
+
+    lines = [
+        re.sub(r"\s+", " ", ln.replace("\u00a0", " ")).strip()
+        for ln in text.splitlines()
+    ]
+    lines = [ln for ln in lines if ln]
+
+    items: List[str] = []
+    cur_term: Optional[str] = None
+    buffer: List[str] = []
+
+    def flush() -> None:
+        nonlocal cur_term, buffer
+        if cur_term:
+            meaning = re.sub(r"\s+", " ", " ".join(buffer)).strip()
+            items.append(f"VOCAB\t{cur_term}\t{meaning}")
+        buffer = []
+
+    for ln in lines:
+        if ln.strip().lower() == "transcript":
+            break
+        if ln.startswith("TERM:"):
+            flush()
+            cur_term = ln[len("TERM:") :].strip()
+            continue
+        buffer.append(ln)
+
+    flush()
+    return [it for it in items if "\t" in it]
+
+
 def extract_speaker_and_text(p: pq) -> Optional[Tuple[str, str]]:
     speaker = (p.find("strong").eq(0).text() or "").strip()
     if not speaker:
@@ -210,11 +265,88 @@ def extract_speaker_and_text(p: pq) -> Optional[Tuple[str, str]]:
 
 
 def _find_transcript_marker(container: pq) -> Optional[pq]:
+    for h in container.find("h3").items():
+        txt = (h.text() or "").strip().lower()
+        if txt == "transcript":
+            return h
+        strong = h.find("strong").eq(0)
+        if strong and (strong.text() or "").strip().lower() == "transcript":
+            return h
     for p in container.find("p").items():
         strong = p.find("strong").eq(0)
         if strong and (strong.text() or "").strip().lower() == "transcript":
             return p
     return None
+
+
+def _parse_transcript_block(p: pq) -> List[str]:
+    raw_html = (p.html() or "").strip()
+    if not raw_html:
+        return []
+
+    html_text = raw_html.replace("&nbsp;", " ")
+    html_text = re.sub(
+        r"<strong>\s*([^<]+?)\s*<br\s*/?>\s*</strong>",
+        r"\nSPEAKER:\1\n",
+        html_text,
+        flags=re.I,
+    )
+    html_text = re.sub(
+        r"<strong>\s*([^<]+?)\s*</strong>\s*<br\s*/?>",
+        r"\nSPEAKER:\1\n",
+        html_text,
+        flags=re.I,
+    )
+    html_text = re.sub(r"<br\s*/?>", "\n", html_text, flags=re.I)
+    text = re.sub(r"<[^>]+>", "", html_text)
+    text = html_lib.unescape(text)
+
+    lines = [
+        re.sub(r"\s+", " ", ln.replace("\u00a0", " ")).strip()
+        for ln in text.splitlines()
+    ]
+    lines = [ln for ln in lines if ln]
+
+    items: List[str] = []
+    cur_speaker: Optional[str] = None
+    buffer: List[str] = []
+
+    def flush() -> None:
+        nonlocal cur_speaker, buffer
+        if cur_speaker and buffer:
+            content = " ".join(buffer).strip()
+            if content:
+                items.append(f"SPEAKER\t{cur_speaker}\t{content}")
+        elif buffer:
+            for b in buffer:
+                if b:
+                    items.append(b)
+        buffer = []
+
+    for ln in lines:
+        if ln.strip().lower() == "transcript":
+            continue
+        if ln.startswith("SPEAKER:"):
+            flush()
+            sp = ln[len("SPEAKER:") :].strip().strip(":")
+            cur_speaker = sp if sp else None
+            continue
+        buffer.append(ln)
+
+    flush()
+
+    final_items: List[str] = []
+    for it in items:
+        if it.startswith("SPEAKER\t"):
+            final_items.append(it)
+            continue
+        m = SPEAKER_RE.match(it)
+        if m and _looks_like_speaker(m.group(1)):
+            final_items.append(f"SPEAKER\t{m.group(1)}\t{m.group(2)}")
+        else:
+            final_items.append(it)
+
+    return final_items
 
 
 def _collect_transcript(container: pq, marker: pq) -> List[str]:
@@ -235,6 +367,12 @@ def _collect_transcript(container: pq, marker: pq) -> List[str]:
             txt = (p.text() or "").strip()
             if not txt:
                 continue
+            block_html = (p.html() or "").lower()
+            if block_html and len(p.find("strong")) > 1 and "<br" in block_html:
+                block_items = _parse_transcript_block(p)
+                if block_items:
+                    items.extend(block_items)
+                    continue
             st = extract_speaker_and_text(p)
             if st:
                 speaker, content = st
@@ -292,6 +430,7 @@ def _render_meta_table(meta: Dict[str, str]) -> List[str]:
 
 def _render_question_lines(lines_in: List[str]) -> List[str]:
     out: List[str] = []
+    in_options = False
     for s in lines_in:
         s = (s or "").strip()
         if not s:
@@ -315,6 +454,18 @@ def _render_question_lines(lines_in: List[str]) -> List[str]:
                     out.append(f"- {label} {body}")
                 out.append("")
                 continue
+
+        if re.match(r"^[a-c]\)\s+", s, flags=re.I):
+            if out and out[-1] != "":
+                out.append("")
+            in_options = True
+            out.append(f"- {s}")
+            continue
+
+        if in_options:
+            if out and out[-1] != "":
+                out.append("")
+            in_options = False
 
         out.append(s)
     return out
@@ -362,6 +513,22 @@ def _render_transcript(items: List[str]) -> List[str]:
             else:
                 out.append(f"{s}  ")
     return out
+
+
+def _looks_like_speaker(name: str) -> bool:
+    name = (name or "").strip()
+    if not name or "-" in name:
+        return False
+    words = [w for w in name.split() if w]
+    if not (1 <= len(words) <= 4):
+        return False
+    for w in words:
+        lw = w.strip(".").lower()
+        if lw in SPEAKER_TITLES:
+            continue
+        if not w[:1].isupper():
+            return False
+    return True
 
 
 def to_markdown(

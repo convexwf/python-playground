@@ -4,7 +4,7 @@
 # @FileName : bbc_learning_english_6min/batch_fetch_transcripts.py
 # @Author : convexwf@gmail.com
 # @CreateDate : 2025-04-24 22:15
-# @UpdateTime : 2025-04-24 22:15
+# @UpdateTime : 2025-04-25 23:04
 """
 Batch fetch BBC 6 Minute English episode pages from a URL list
 and parse transcripts to Markdown.
@@ -55,6 +55,8 @@ def _slug_from_url(url: str) -> str:
     else:
         stem = path.split("/")[-1] or "index"
     stem = re.sub(r"[^A-Za-z0-9._-]+", "_", stem)
+    if re.fullmatch(r"\d{6}", stem):
+        stem = f"ep-{stem}"
     return stem
 
 
