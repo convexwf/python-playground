@@ -4,7 +4,7 @@
 # @FileName : bbc_learning_english_6min/parse_transcript_pyquery.py
 # @Author : convexwf@gmail.com
 # @CreateDate : 2025-04-24 22:15
-# @UpdateTime : 2025-04-25 23:04
+# @UpdateTime : 2025-04-26 10:29
 """
 Parse BBC Learning English local HTML -> Markdown using pyquery.
 Adds hierarchy by h3 sections and includes title + publish time at top.
@@ -478,8 +478,14 @@ def _render_vocabulary_table(items: List[str]) -> List[str]:
         if not s:
             continue
         if s.startswith("VOCAB\t"):
-            _, term, meaning = s.split("\t", 2)
-            rows.append((term.strip(), meaning.strip()))
+            parts = s.split("\t", 2)
+            if len(parts) == 3:
+                _, term, meaning = parts
+                rows.append((term.strip(), meaning.strip()))
+            else:
+                term = parts[1].strip() if len(parts) > 1 else ""
+                if term:
+                    rows.append((term, ""))
             continue
         s = re.sub(r"\s+", " ", s).strip()
         parts = s.split(" ", 1)
@@ -503,8 +509,14 @@ def _render_transcript(items: List[str]) -> List[str]:
             continue
         seen.add(s)
         if s.startswith("SPEAKER\t"):
-            _, speaker, content = s.split("\t", 2)
-            out.append(f"**{speaker}:** {content}  ")
+            parts = s.split("\t", 2)
+            if len(parts) == 3:
+                _, speaker, content = parts
+                out.append(f"**{speaker}:** {content}  ")
+            else:
+                cleaned = re.sub(r"\s+", " ", s.replace("SPEAKER\t", "")).strip()
+                if cleaned:
+                    out.append(f"{cleaned}  ")
         else:
             if s.strip().lower() == "transcript":
                 continue

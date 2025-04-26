@@ -4,7 +4,7 @@
 # @FileName : bbc_learning_english_6min/batch_fetch_transcripts.py
 # @Author : convexwf@gmail.com
 # @CreateDate : 2025-04-24 22:15
-# @UpdateTime : 2025-04-25 23:04
+# @UpdateTime : 2025-04-26 10:29
 """
 Batch fetch BBC 6 Minute English episode pages from a URL list
 and parse transcripts to Markdown.
@@ -123,8 +123,8 @@ def main() -> None:
     ap.add_argument(
         "--sleep",
         type=float,
-        default=1.0,
-        help="Sleep seconds between requests (default: 1.0)",
+        default=0.1,
+        help="Sleep seconds between requests (default: 0.1)",
     )
     ap.add_argument(
         "--no-robots",
@@ -157,6 +157,7 @@ def main() -> None:
     fetch_skipped = 0
     fetch_failed = 0
     parse_ok = 0
+    parse_skipped = 0
     parse_failed = 0
 
     for idx, url in enumerate(urls, start=1):
@@ -171,6 +172,7 @@ def main() -> None:
                 fetch_ok += 1
             else:
                 fetch_skipped += 1
+                print(f"[{idx}/{len(urls)}] FETCH SKIP -> {slug}")
         except Exception as e:
             fetch_failed += 1
             print(f"[{idx}/{len(urls)}] FETCH FAIL -> {slug}: {e}", file=sys.stderr)
@@ -178,14 +180,18 @@ def main() -> None:
                 time.sleep(args.sleep)
             continue
 
-        # Parse step (always attempt if HTML exists)
-        try:
-            _parse_to_md(html_path, md_path)
-            print(f"[{idx}/{len(urls)}] PARSE OK -> {slug}")
-            parse_ok += 1
-        except Exception as e:
-            parse_failed += 1
-            print(f"[{idx}/{len(urls)}] PARSE FAIL -> {slug}: {e}", file=sys.stderr)
+        # Parse step (skip if markdown exists unless --overwrite)
+        if not args.overwrite and md_path.exists():
+            parse_skipped += 1
+            print(f"[{idx}/{len(urls)}] PARSE SKIP -> {slug}")
+        else:
+            try:
+                _parse_to_md(html_path, md_path)
+                print(f"[{idx}/{len(urls)}] PARSE OK -> {slug}")
+                parse_ok += 1
+            except Exception as e:
+                parse_failed += 1
+                print(f"[{idx}/{len(urls)}] PARSE FAIL -> {slug}: {e}", file=sys.stderr)
 
         if idx < len(urls) and args.sleep > 0:
             time.sleep(args.sleep)
@@ -193,7 +199,7 @@ def main() -> None:
     print(
         "Done. "
         f"fetch_ok={fetch_ok}, fetch_skipped={fetch_skipped}, fetch_failed={fetch_failed}; "
-        f"parse_ok={parse_ok}, parse_failed={parse_failed}"
+        f"parse_ok={parse_ok}, parse_skipped={parse_skipped}, parse_failed={parse_failed}"
     )
 
 
